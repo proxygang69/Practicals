@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie Reviews</title>
+
+  <!-- jQuery Mobile CSS -->
+  <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+
+  <!-- jQuery and jQuery Mobile JS -->
+  <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+  <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+  <style>
+    .movie {
+      margin-bottom: 20px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #ccc;
+    }
+    .movie img {
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+    .genre {
+      font-style: italic;
+      color: #555;
+      margin-top: 5px;
+    }
+    .summary, .review {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+
+<!-- Home Page -->
+<div data-role="page" id="home">
+  <div data-role="header" data-position="fixed">
+    <h1>Movie Reviews</h1>
+  </div>
+
+  <div data-role="content" class="content-padding">
+    
+    <!-- Movie 1 -->
+    <div class="movie">
+      <h2>Inception</h2>
+      <img src="https://upload.wikimedia.org/wikipedia/en/7/7f/Inception_ver3.jpg" alt="Inception Poster">
+      <p class="genre">Genre: Science Fiction, Thriller</p>
+      <p class="summary"><strong>Summary:</strong> A skilled thief is given a chance to erase his criminal past by planting an idea into a target's subconscious.</p>
+      <p class="review"><strong>Review:</strong> Inception delivers a thrilling and mind-bending experience. Nolan’s storytelling and visual effects are outstanding!</p>
+    </div>
+
+    <!-- Movie 2 -->
+    <div class="movie">
+      <h2>Interstellar</h2>
+      <img src="https://upload.wikimedia.org/wikipedia/en/b/bc/Interstellar_film_poster.jpg" alt="Interstellar Poster">
+      <p class="genre">Genre: Science Fiction, Drama</p>
+      <p class="summary"><strong>Summary:</strong> A team of explorers travel through a wormhole in space in an attempt to save humanity.</p>
+      <p class="review"><strong>Review:</strong> A breathtaking journey through space and emotions. The visuals and the emotional depth are truly moving.</p>
+    </div>
+
+    <!-- Movie 3 -->
+    <div class="movie">
+      <h2>Avengers: Endgame</h2>
+      <img src="https://upload.wikimedia.org/wikipedia/en/0/0d/Avengers_Endgame_poster.jpg" alt="Endgame Poster">
+      <p class="genre">Genre: Action, Superhero, Adventure</p>
+      <p class="summary"><strong>Summary:</strong> The Avengers assemble once more to reverse Thanos' actions and restore balance to the universe.</p>
+      <p class="review"><strong>Review:</strong> A perfect culmination of over a decade of storytelling. Emotional, action-packed, and satisfying for fans.</p>
+    </div>
+
+    <!-- Movie 4 -->
+    <div class="movie">
+      <h2>The Lion King</h2>
+      <img src="https://upload.wikimedia.org/wikipedia/en/3/3d/The_Lion_King_poster.jpg" alt="The Lion King Poster">
+      <p class="genre">Genre: Animation, Drama, Adventure</p>
+      <p class="summary"><strong>Summary:</strong> Follows the journey of Simba, a young lion who must embrace his role as king after tragedy strikes.</p>
+      <p class="review"><strong>Review:</strong> A timeless classic with beautiful animation, unforgettable music, and a touching story of responsibility and growth.</p>
+    </div>
+
+    <!-- Movie 5 -->
+    <div class="movie">
+      <h2>Spider-Man: Into the Spider-Verse</h2>
+      <img src="https://upload.wikimedia.org/wikipedia/en/d/d0/Spider-Man_Into_the_Spider-Verse_poster.png" alt="Spider-Verse Poster">
+      <p class="genre">Genre: Animation, Superhero, Action</p>
+      <p class="summary"><strong>Summary:</strong> Teenager Miles Morales becomes Spider-Man of his universe and joins other Spider-People to save the multiverse.</p>
+      <p class="review"><strong>Review:</strong> Fresh, stylish, and innovative. A visual masterpiece with a heartwarming story and great characters.</p>
+    </div>
+
+  </div>
+
+  <div data-role="footer" data-position="fixed">
+    <h4>Movie Reviews &copy; 2025</h4>
+  </div>
+</div>
+
+</body>
+</html>

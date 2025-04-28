@@ -1,0 +1,33 @@
+npm install express mongoose cors body-parser
+bookstore-backend/
+├── server.js
+├── models/
+│   └── Book.js
+├── routes/
+│   └── bookRoutes.js
+├── package.json
+
+
+
+Method: POST  
+URL: http://localhost:3000/api/books  
+Purpose: Add a new book  
+Body Parameters: { "title": "", "author": "", "price": "", "genre": "" }
+
+Method: GET  
+URL: http://localhost:3000/api/books  
+Purpose: Retrieve all books  
+Body Parameters: None
+
+Method: PUT  
+URL: http://localhost:3000/api/books/:id  
+Purpose: Update a book by ID  
+Body Parameters: { "title": "", "author": "", "price": "", "genre": "" }
+
+Method: DELETE  
+URL: http://localhost:3000/api/books/:id  
+Purpose: Delete a book by ID  
+Body Parameters: None
+
+
+replace id with real id in your code!

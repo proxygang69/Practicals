@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Auth SPA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .hidden { display: none; }
+  </style>
+</head>
+<body class="bg-light">
+<div class="container py-4">
+  <h2 class="text-center mb-4">👥 User Auth SPA</h2>
+
+  <!-- Navigation -->
+  <div class="text-center mb-4">
+    <button class="btn btn-outline-primary mx-1" onclick="showSection('registerSection')">Register</button>
+    <button class="btn btn-outline-success mx-1" onclick="showSection('loginSection')">Login</button>
+    <button class="btn btn-outline-danger mx-1 hidden" id="logoutBtn" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- Register Section -->
+  <div id="registerSection">
+    <h4>Register</h4>
+    <form id="registerForm">
+      <input class="form-control mb-2" type="text" id="name" placeholder="Full Name" required>
+      <input class="form-control mb-2" type="email" id="email" placeholder="Email" required>
+      <input class="form-control mb-2" type="tel" id="mobile" placeholder="Mobile (10 digits)" required pattern="^\d{10}$">
+      <input class="form-control mb-2" type="date" id="dob" required>
+      <input class="form-control mb-2" type="text" id="city" placeholder="City" required>
+      <textarea class="form-control mb-2" id="address" placeholder="Address" required></textarea>
+      <input class="form-control mb-2" type="text" id="regUsername" placeholder="Username" required>
+      <input class="form-control mb-2" type="password" id="regPassword" placeholder="Password" required>
+      <button class="btn btn-primary w-100" type="submit">Register</button>
+    </form>
+    <div id="regMsg" class="mt-2"></div>
+  </div>
+
+  <!-- Login Section -->
+  <div id="loginSection" class="hidden">
+    <h4>Login</h4>
+    <form id="loginForm">
+      <input class="form-control mb-2" type="text" id="loginUsername" placeholder="Username" required>
+      <input class="form-control mb-2" type="password" id="loginPassword" placeholder="Password" required>
+      <button class="btn btn-success w-100" type="submit">Login</button>
+    </form>
+    <div id="loginMsg" class="mt-2 text-danger"></div>
+  </div>
+
+  <!-- User List Section -->
+  <div id="userListSection" class="hidden">
+    <h4 class="my-3">📋 Registered Users</h4>
+    <div id="userTable"></div>
+  </div>
+</div>
+
+<script>
+  // Utilities
+  const getUsers = () => JSON.parse(localStorage.getItem("users") || "[]");
+  const saveUsers = (users) => localStorage.setItem("users", JSON.stringify(users));
+  const showSection = (sectionId) => {
+    ["registerSection", "loginSection", "userListSection"].forEach(id =>
+      document.getElementById(id).classList.add("hidden")
+    );
+    document.getElementById(sectionId).classList.remove("hidden");
+  };
+
+  // Register
+  document.getElementById("registerForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    const user = {
+      name: name.value.trim(),
+      email: email.value.trim(),
+      mobile: mobile.value.trim(),
+      dob: dob.value,
+      city: city.value.trim(),
+      address: address.value.trim(),
+      username: regUsername.value.trim(),
+      password: regPassword.value.trim(),
+    };
+
+    // Mobile validation
+    if (!/^\d{10}$/.test(user.mobile)) {
+      regMsg.textContent = "❌ Enter a valid 10-digit mobile number.";
+      regMsg.className = "text-danger mt-2";
+      return;
+    }
+
+    let users = getUsers();
+    if (users.some(u => u.username === user.username)) {
+      regMsg.textContent = "⚠️ Username already exists.";
+      regMsg.className = "text-warning mt-2";
+      return;
+    }
+
+    users.push(user);
+    saveUsers(users);
+    regMsg.textContent = "✅ Registered successfully!";
+    regMsg.className = "text-success mt-2";
+    document.getElementById("registerForm").reset();
+  });
+
+  // Login
+  document.getElementById("loginForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+    const username = loginUsername.value.trim();
+    const password = loginPassword.value.trim();
+    const users = getUsers();
+
+    const matchedUser = users.find(u => u.username === username && u.password === password);
+
+    if (matchedUser) {
+      sessionStorage.setItem("loggedInUser", JSON.stringify(matchedUser));
+      loginMsg.textContent = "";
+      document.getElementById("logoutBtn").classList.remove("hidden");
+      showSection("userListSection");
+      displayUsers();
+    } else {
+      loginMsg.textContent = "❌ Invalid username or password.";
+    }
+  });
+
+  // Logout
+  function logout() {
+    sessionStorage.removeItem("loggedInUser");
+    document.getElementById("logoutBtn").classList.add("hidden");
+    showSection("loginSection");
+  }
+
+  // Display all users
+  function displayUsers() {
+    const users = getUsers();
+    if (users.length === 0) {
+      userTable.innerHTML = "<p>No users found.</p>";
+    } else {
+      let rows = users.map(u => `
+        <tr>
+          <td>${u.name}</td>
+          <td>${u.email}</td>
+          <td>${u.mobile}</td>
+          <td>${u.dob}</td>
+          <td>${u.city}</td>
+          <td>${u.address}</td>
+        </tr>
+      `).join("");
+
+      userTable.innerHTML = `
+        <table class="table table-bordered table-striped">
+          <thead class="table-dark">
+            <tr><th>Name</th><th>Email</th><th>Mobile</th><th>DOB</th><th>City</th><th>Address</th></tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>
+      `;
+    }
+  }
+
+  // On load
+  window.onload = () => {
+    if (sessionStorage.getItem("loggedInUser")) {
+      showSection("userListSection");
+      displayUsers();
+      document.getElementById("logoutBtn").classList.remove("hidden");
+    } else {
+      showSection("registerSection");
+    }
+  };
+</script>
+</body>
+</html>

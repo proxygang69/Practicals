@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User List</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    ul#userList {
+      list-style: none;
+      padding: 0;
+      max-width: 500px;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    ul#userList li {
+      padding: 15px;
+      border-bottom: 1px solid #ddd;
+      font-size: 18px;
+      color: #555;
+    }
+    ul#userList li:last-child {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Registered Users</h1>
+
+  <ul id="userList"></ul>
+
+  <script>
+    async function fetchUsers() {
+      try {
+        const response = await fetch('/api/users');
+        const users = await response.json();
+        const userList = document.getElementById('userList');
+
+        users.forEach(user => {
+          const li = document.createElement('li');
+          li.textContent = `${user.name} (${user.email})`;
+          userList.appendChild(li);
+        });
+      } catch (error) {
+        console.error('Error fetching users:', error);
+      }
+    }
+
+    fetchUsers();
+  </script>
+</body>
+</html>

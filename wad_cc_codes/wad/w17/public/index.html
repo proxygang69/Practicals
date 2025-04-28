@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Directory</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <header>
+    <h1>Employee Directory 🏢</h1>
+  </header>
+
+  <main id="employeeList">
+    <!-- Employee Cards will appear here -->
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Employee Directory</p>
+  </footer>
+
+  <script>
+    // Fetch employee data and display
+    fetch('/api/employees')
+      .then(response => response.json())
+      .then(employees => {
+        const employeeList = document.getElementById('employeeList');
+        employees.forEach(emp => {
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.innerHTML = `
+            <img src="${emp.profileImage}" alt="${emp.name}">
+            <h2>${emp.name}</h2>
+            <p><strong>Designation:</strong> ${emp.designation}</p>
+            <p><strong>Department:</strong> ${emp.department}</p>
+            <p><strong>Salary:</strong> ${emp.salary}</p>
+          `;
+          employeeList.appendChild(card);
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching employees:', error);
+      });
+  </script>
+</body>
+</html>

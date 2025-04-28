@@ -1,0 +1,24 @@
+npm init -y 
+npm install express mongoose
+
+
+Mongo DB connection string should be replaced with your  connection string
+
+
+
+
+http://localhost:3000/insert — Insert sample songs
+
+http://localhost:3000/songs — Display all songs in table
+
+http://localhost:3000/songs/director/Shankar-Ehsaan-Loy
+
+http://localhost:3000/songs/director/Shankar-Ehsaan-Loy/singer/Siddharth Mahadevan
+
+http://localhost:3000/songs/singer/Arijit Singh/film/Aashiqui 2
+
+http://localhost:3000/update/Tum Hi Ho — Adds actor/actress
+
+http://localhost:3000/delete/Zinda — Deletes song
+
+http://localhost:3000/add — Adds new favorite song

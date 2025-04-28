@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>User Registration</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="container">
+    <h2>User Registration</h2>
+
+    <form id="registrationForm">
+      <input type="text" id="name" placeholder="Enter Name" required>
+      <input type="email" id="email" placeholder="Enter Email" required>
+      <input type="text" id="username" placeholder="Enter Username" required>
+
+      <div class="buttons">
+        <button type="submit">Register</button>
+        <button type="button" id="resetBtn">Reset</button>
+      </div>
+    </form>
+
+    <div id="userList">
+      <h3>Registered Users</h3>
+      <!-- User list -->
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

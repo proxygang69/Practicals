@@ -1,0 +1,32 @@
+<div class="container">
+  <h1>📝 To-Do List</h1>
+
+  <div class="form-group">
+    <input 
+      [(ngModel)]="newTask" 
+      type="text" 
+      class="form-control" 
+      placeholder="Enter your task"
+    />
+    <button 
+      class="btn btn-primary mt-2" 
+      (click)="editIndex === null ? addTask() : updateTask()"
+    >
+      {{ editIndex === null ? 'Add Task' : 'Update Task' }}
+    </button>
+  </div>
+
+  <ul class="list-group mt-4">
+    <li 
+      class="list-group-item d-flex justify-content-between align-items-center" 
+      *ngFor="let task of tasks; index as i"
+    >
+      {{ task }}
+
+      <div>
+        <button class="btn btn-sm btn-warning me-2" (click)="editTask(i)">Edit</button>
+        <button class="btn btn-sm btn-danger" (click)="deleteTask(i)">Delete</button>
+      </div>
+    </li>
+  </ul>
+</div>

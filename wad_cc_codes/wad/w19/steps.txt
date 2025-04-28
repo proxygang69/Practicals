@@ -1,0 +1,22 @@
+npm init -y
+npm install express mongoose
+
+
+
+mongo db connection is Important!!!
+
+http://localhost:3000/insert – Insert initial data
+
+http://localhost:3000/students – View all students
+
+http://localhost:3000/dsbda-more-20
+
+http://localhost:3000/update/Alice
+
+http://localhost:3000/all-subjects-25
+
+http://localhost:3000/math-sci-low
+
+http://localhost:3000/delete/Bob
+
+these are the routes to access the data

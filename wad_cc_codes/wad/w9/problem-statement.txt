@@ -1,0 +1,28 @@
+W9.Create your own webpage using HTML, CSS and Bootstrap called "index.html". 
+It should have: 
+●  A title 
+●  Three or more types of headings 
+●  Some paragraphs 
+●  One or more ordered lists 
+●  One or more unordered lists 
+●  One Or More Tables 
+●  Some line-breaks 
+●  Some horizontal lines 
+●  Some comments 
+●  Various text styles: bold, italic, strike-through, underline 
+Make sure that the file is reasonable large: 2-3 screen worth at least. (You can 
+add dummy content if you wish). 
+●  View the above HTML file on a browser, using a URL such as: 
+●  http://localhost/index.html OR double click on html file. 
+●  Learn to look at the HTML source from the browser window. 
+●  Now create some internal bookmarks and links using the "name=xyz" 
+property and "href=#xyz". 
+Type the URLs for these internal bookmarks directly onto the browser. 
+●  Now move all the HTML files to another directory. Your links should still work (they should 
+be relative links). 
+●  Now include some styles within HTML tag elements. For example: table border, cell 
+background, link colour, text colour, background colour, list style, text font, etc. 
+●  Now include some of the earlier styles in the "style" tag of the HTML "head" section, 
+instead of marking the styles in individual HTML tag elements. 
+●  Now have a separate css file for the above styles, so that the same can be included in 
+multiple HTML files.

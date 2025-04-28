@@ -1,0 +1,145 @@
+Step 1: Create the CUSTOMERS and ORDERS Collections
+Sample CUSTOMERS collection
+
+db.CUSTOMERS.insertMany([
+  {
+    customer_id: 1,
+    customer_name: "ABC",
+    age: 28,
+    mob_no: "1234567890",
+    address: "Pune"
+  },
+  {
+    customer_id: 2,
+    customer_name: "XYZ",
+    age: 35,
+    mob_no: "9876543210",
+    address: "Mumbai"
+  }
+  // Add more customers as needed
+]);
+
+Sample ORDERS collection
+
+db.ORDERS.insertMany([
+  {
+    order_id: 1,
+    customer_id: 1,
+    product_list: [
+      { product_name: "Shoes", quantity: 1 },
+      { product_name: "Bag", quantity: 2 }
+    ]
+  },
+  {
+    order_id: 2,
+    customer_id: 2,
+    product_list: [
+      { product_name: "Laptop", quantity: 1 },
+      { product_name: "Shoes", quantity: 1 }
+    ]
+  },
+  {
+    order_id: 3,
+    customer_id: 1,
+    product_list: [
+      { product_name: "Mobile", quantity: 1 }
+    ]
+  }
+  // Add more orders as needed
+]);
+
+Step 2: Implement the Queries
+
+1. Retrieve all the documents from the ORDERS collection
+
+db.ORDERS.find();
+
+2. List customers in ascending order of their age
+
+db.CUSTOMERS.find().sort({ age: 1 });
+
+3. Display the total number of orders
+
+db.ORDERS.countDocuments();
+
+4. Display the mobile numbers of customers who have purchased the product “Shoes”
+
+db.ORDERS.aggregate([
+  { $match: { "product_list.product_name": "Shoes" } },
+  {
+    $lookup: {
+      from: "CUSTOMERS",
+      localField: "customer_id",
+      foreignField: "customer_id",
+      as: "customer_details"
+    }
+  },
+  { $unwind: "$customer_details" },
+  { $project: { "customer_details.mob_no": 1, _id: 0 } }
+]);
+
+5. Display the total number of customers in the CUSTOMERS collection
+
+db.CUSTOMERS.countDocuments();
+
+6. Display the total number of products purchased in order_id:2
+
+db.ORDERS.aggregate([
+  { $match: { order_id: 2 } },
+  { $unwind: "$product_list" },
+  {
+    $group: {
+      _id: "$order_id",
+      total_products: { $sum: "$product_list.quantity" }
+    }
+  }
+]);
+
+7. Add another product with quantity 2 to order_id:3 for customer "ABC"
+
+db.ORDERS.updateOne(
+  { order_id: 3, customer_id: 1 }, // Assuming customer "ABC" has `customer_id: 1`
+  { $push: { product_list: { product_name: "New Product", quantity: 2 } } }
+);
+
+Step 3: Index Operations
+
+1. Create an index on customer_name
+
+db.CUSTOMERS.createIndex({ customer_name: 1 });
+
+2. Get the indexes
+
+db.CUSTOMERS.getIndexes();
+
+3. Drop the index on customer_name
+
+db.CUSTOMERS.dropIndex("customer_name_1");
+
+Step 4: Aggregation to Display Total Orders per Customer
+Using an aggregation pipeline to count the total number of orders for each customer:
+
+db.ORDERS.aggregate([
+  {
+    $group: {
+      _id: "$customer_id",
+      total_orders: { $sum: 1 }
+    }
+  },
+  {
+    $lookup: {
+      from: "CUSTOMERS",
+      localField: "_id",
+      foreignField: "customer_id",
+      as: "customer_details"
+    }
+  },
+  { $unwind: "$customer_details" },
+  {
+    $project: {
+      customer_name: "$customer_details.customer_name",
+      total_orders: 1,
+      _id: 0
+    }
+  }
+]);

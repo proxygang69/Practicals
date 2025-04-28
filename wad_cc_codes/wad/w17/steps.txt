@@ -1,0 +1,12 @@
+employee-directory/
+│
+├── server.js
+├── employees.json
+└── public/
+    ├── index.html
+    ├── css/
+    │   └── style.css
+    └── images/
+        └── (profile images here)
+npm init -y
+npm install express

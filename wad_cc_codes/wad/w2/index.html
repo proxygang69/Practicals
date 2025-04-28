@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>jQuery Mobile Website</title>
+
+  <!-- jQuery Mobile CDN -->
+  <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+  <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+  <!-- Custom CSS -->
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .custom-header {
+      background-color: #2c3e50 !important;
+      color: white !important;
+      text-align: center;
+      padding: 10px;
+    }
+
+    .custom-footer {
+      background-color: #34495e !important;
+      color: white !important;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .custom-content {
+      padding: 15px;
+    }
+
+    .custom-button {
+      background-color: #3498db !important;
+      border-color: #2980b9 !important;
+      color: white !important;
+    }
+
+    .custom-list li a {
+      background-color: #ecf0f1 !important;
+      color: #2c3e50 !important;
+    }
+
+    .highlight {
+      background-color: #f1c40f;
+      padding: 5px;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Home Page -->
+  <div data-role="page" id="home">
+
+    <div data-role="header" class="custom-header">
+      <h1>Home</h1>
+    </div>
+
+    <div data-role="content" class="custom-content">
+      <p>Welcome to the <span class="highlight">jQuery Mobile Demo</span> Website.</p>
+      <a href="#about" class="ui-btn custom-button">Go to About Page</a>
+      <a href="#contact" class="ui-btn custom-button">Go to Contact Page</a>
+    </div>
+
+    <div data-role="footer" class="custom-footer" data-position="fixed">
+      <h4>Powered by jQuery Mobile | Home Page</h4>
+    </div>
+  </div>
+
+  <!-- About Page -->
+  <div data-role="page" id="about">
+
+    <div data-role="header" class="custom-header">
+      <h1>About Us</h1>
+      <a href="#home" data-icon="home" data-iconpos="notext" class="ui-btn-left">Home</a>
+    </div>
+
+    <div data-role="content" class="custom-content">
+      <p>This simple site demonstrates how jQuery Mobile makes it easy to create responsive, touch-friendly web pages.</p>
+      <p>We focus on:</p>
+      <ul data-role="listview" class="custom-list">
+        <li><a href="#">Simple & Clean Design</a></li>
+        <li><a href="#">Smooth Page Transitions</a></li>
+        <li><a href="#">Easy Navigation</a></li>
+        <li><a href="#">Fully Responsive Layout</a></li>
+      </ul>
+      <p>jQuery Mobile is great for prototypes, small apps, and learning mobile-friendly web design.</p>
+    </div>
+
+    <div data-role="footer" class="custom-footer" data-position="fixed">
+      <h4>Learning jQuery Mobile | About Page</h4>
+    </div>
+  </div>
+
+  <!-- Contact Page -->
+  <div data-role="page" id="contact">
+
+    <div data-role="header" class="custom-header">
+      <h1>Contact</h1>
+      <a href="#home" data-icon="home" data-iconpos="notext" class="ui-btn-left">Home</a>
+    </div>
+
+    <div data-role="content" class="custom-content">
+      <form>
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name">
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email">
+
+        <label for="msg">Message:</label>
+        <textarea name="msg" id="msg"></textarea>
+
+        <button class="ui-btn custom-button">Submit</button>
+      </form>
+    </div>
+
+    <div data-role="footer" class="custom-footer" data-position="fixed">
+      <h4>Contact Support | Contact Page</h4>
+    </div>
+  </div>
+
+</body>
+
+</html>

@@ -1,0 +1,53 @@
+# Angular 17+ Authentication App Setup (Standalone Components)
+
+# Step 1: Install Node.js
+- Visit https://nodejs.org and download the LTS version
+
+# Step 2: Verify Node.js and npm installation
+```
+node -v        # Check Node.js version
+npm -v         # Check npm version
+```
+
+# Step 3: Install Angular CLI globally
+```
+npm install -g @angular/cli
+```
+
+# Step 4: Verify Angular CLI installation
+```
+ng version      # Shows installed Angular CLI version
+```
+
+# Step 5: Create a new Angular project (Standalone + Routing + CSS)
+```
+ng new angular-auth-app --routing --style=css
+```
+- Choose "Standalone Component" when prompted (no app.module.ts will be created)
+- Choose CSS when asked for styles
+
+# Step 6: Navigate into the project directory
+```
+cd angular-auth-app
+```
+
+# Step 7: Generate components
+```
+ng g c components/register     # Register Component
+ng g c components/login        # Login Component
+ng g c components/profile      # Profile Component
+```
+
+# Step 8: Generate a service for auth
+```
+ng g s services/auth           # AuthService
+```
+
+# Step 9: Generate a user interface
+```
+ng g interface models/user     # User interface
+```
+
+# Step 10: Serve the project
+```
+ng serve

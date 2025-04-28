@@ -1,0 +1,15 @@
+your-project/
+│
+├── server.js
+└── public/
+    ├── index.html
+    ├── about.html
+    ├── contact.html
+    ├── css/
+    │   └── style.css
+    └── images/
+        └── (your images here)
+
+
+npm init -y
+npm install express cors

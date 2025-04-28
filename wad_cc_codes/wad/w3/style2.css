@@ -1,0 +1,132 @@
+/* Global Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Fonts */
+  body {
+    font-family: 'Poppins', sans-serif;
+    line-height: 1.6;
+    background: #fffdf7;
+    color: #333;
+    padding: 20px;
+  }
+  
+  /* Header */
+  header {
+    background: linear-gradient(to right, #ff704d, #ff9966);
+    color: white;
+    text-align: center;
+    padding: 40px 20px;
+    border-radius: 12px;
+  }
+  
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    margin-bottom: 10px;
+  }
+  
+  header p {
+    font-size: 1.2rem;
+  }
+  
+  /* Main Content */
+  .container {
+    max-width: 1100px;
+    margin: 30px auto;
+  }
+  
+  /* Card Styling */
+  .card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.06);
+    margin-bottom: 30px;
+  }
+  
+  /* Section Headings */
+  h2 {
+    color: #e65100;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+  
+  /* Lists */
+  ol, ul {
+    padding-left: 20px;
+  }
+  
+  li {
+    margin-bottom: 5px;
+    font-size: 1rem;
+  }
+  
+  /* Menu Table */
+  .menu-scroll {
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #ffe0b2;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  td img {
+    width: 100px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+  }
+  
+  td img:hover {
+    transform: scale(1.05);
+  }
+  
+  tr:hover {
+    background-color: #fff3e0;
+  }
+  
+  /* Footer */
+  footer {
+    text-align: center;
+    background: #ffe0b2;
+    padding: 15px;
+    font-weight: bold;
+    margin-top: 50px;
+    border-radius: 12px;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    header h1 {
+      font-size: 2rem;
+    }
+  
+    table, thead, tbody, th, td, tr {
+      font-size: 14px;
+    }
+  
+    td img {
+      width: 80px;
+      height: 60px;
+    }
+  }
+  

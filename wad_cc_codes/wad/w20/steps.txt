@@ -1,0 +1,49 @@
+employee-management/
+│
+├── models/
+│   └── Employee.js            # Employee model schema
+│
+├── routes/
+│   └── employeeRoutes.js      # Routes for employee operations (CRUD)
+│
+├── node_modules/              # Installed dependencies (auto-created)
+│
+├── server.js                 # Entry point for the application
+│
+├── package.json              # Project metadata and dependencies
+├── package-lock.json         # Auto-generated (dependency versions)
+
+npm init -y
+npm install express mongoose body-parser
+
+1. URL: http://localhost:5000/api/employees
+   Method: POST
+   Body:
+
+        {
+            "name": "John Doe",
+            "department": "IT",
+            "designation": "Software Engineer",
+            "salary": 50000,
+            "joiningDate": "2023-01-01"
+        }
+
+
+2. URL: http://localhost:5000/api/employees
+   Method: GET
+
+3. URL: http://localhost:5000/api/employees/:id (replace :id with the employee's actual MongoDB _id)
+   Method: PUT
+   Body:
+           {
+  "name": "John Doe Updated",
+  "department": "IT",
+  "designation": "Senior Software Engineer",
+  "salary": 60000,
+  "joiningDate": "2023-01-01"
+            }
+
+4. URL: http://localhost:5000/api/employees/:id (replace :id with the employee's actual MongoDB _id)
+   Method: DELETE           
+
+
