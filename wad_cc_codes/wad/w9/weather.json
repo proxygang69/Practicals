@@ -1,0 +1,21 @@
+{
+    "Delhi": {
+      "temp": 32,
+      "description": "Sunny",
+      "humidity": 40,
+      "wind": 5
+    },
+    "Mumbai": {
+      "temp": 30,
+      "description": "Cloudy",
+      "humidity": 70,
+      "wind": 4
+    },
+    "Kolkata": {
+      "temp": 28,
+      "description": "Rainy",
+      "humidity": 85,
+      "wind": 3
+    }
+  }
+  
