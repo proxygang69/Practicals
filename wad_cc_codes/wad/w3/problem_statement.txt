@@ -1,3 +1,11 @@
-W-3. Write a JavaScript Program to get the user registration data and push to Array 
-of api with AJAX POST method and list data. 
-Api: https://jsonplaceholder.typicode.com/users 
+W3 Design a restaurant menu webpage using HTML and CSS, including menu
+categories, dishes, and pricing.
+Content
+"ABC Delights - Restaurant Menu"
+Welcome to ABC Delights
+Restaurant introduction, chef’s message, and food quality assurance.
+Top dishes ranked based on popularity (e.g., 1. Paneer Tikka, 2. Biryani)
+Available cuisines (e.g., - Italian, - Indian, - Chinese)
+
+Menu table with Dish Name, Description, Price (INR ₹)
+Add suitable images for the Dish

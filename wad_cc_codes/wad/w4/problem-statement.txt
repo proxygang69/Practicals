@@ -1,2 +1,11 @@
-W-4 Create an Angular application which will do the following actions: Register 
-User, Login User, Show User Data on Profile Component.
+W4-Develop a webpage for an online course listing using HTML and CSS,
+showcasing available courses and their details.
+Content
+"Online Learning Hub - Courses"
+Welcome to Online Learning Hub
+Introduction to online learning, benefits, and course offerings.
+Step-by-step learning paths (e.g., 1. Beginner, 2. Intermediate, 3.
+Advanced)
+Course categories (e.g., - AI & ML, - Data Science, - Web
+Development)
+Course table with Course Name, Instructor, Duration, Fee (INR ₹)

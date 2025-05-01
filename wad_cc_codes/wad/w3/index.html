@@ -2,31 +2,90 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>User Registration</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>ABC Delights - Restaurant Menu</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div class="container">
-    <h2>User Registration</h2>
+  <header>
+    <h1>ABC Delights</h1>
+    <p>Welcome to ABC Delights – Where Flavor Meets Finesse</p>
+  </header>
 
-    <form id="registrationForm">
-      <input type="text" id="name" placeholder="Enter Name" required>
-      <input type="email" id="email" placeholder="Enter Email" required>
-      <input type="text" id="username" placeholder="Enter Username" required>
+  <section class="intro">
+    <h2>About Us</h2>
+    <p>At ABC Delights, we serve happiness on a plate. Our chef, with over 20 years of experience, crafts each dish with love and fresh ingredients. We guarantee top-notch food quality, hygiene, and an unforgettable dining experience.</p>
+  </section>
 
-      <div class="buttons">
-        <button type="submit">Register</button>
-        <button type="button" id="resetBtn">Reset</button>
-      </div>
-    </form>
+  <section class="popular">
+    <h2>Top Dishes</h2>
+    <ol>
+      <li>Paneer Tikka</li>
+      <li>Biryani</li>
+      <li>Butter Chicken</li>
+      <li>Spring Rolls</li>
+      <li>Margherita Pizza</li>
+    </ol>
+  </section>
 
-    <div id="userList">
-      <h3>Registered Users</h3>
-      <!-- User list -->
-    </div>
-  </div>
+  <section class="cuisines">
+    <h2>Available Cuisines</h2>
+    <ul>
+      <li>Italian</li>
+      <li>Indian</li>
+      <li>Chinese</li>
+    </ul>
+  </section>
 
-  <script src="app.js"></script>
+  <section class="menu">
+    <h2>Our Menu</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Dish Image</th>
+          <th>Dish Name</th>
+          <th>Description</th>
+          <th>Price (₹)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><img src="https://picsum.photos/id/1062/100/80" alt="Paneer Tikka"></td>
+          <td>Paneer Tikka</td>
+          <td>Spicy grilled cottage cheese cubes served with mint chutney.</td>
+          <td>₹250</td>
+        </tr>
+        <tr>
+          <td><img src="https://picsum.photos/id/292/100/80" alt="Biryani"></td>
+          <td>Biryani</td>
+          <td>Fragrant basmati rice cooked with tender meat and spices.</td>
+          <td>₹300</td>
+        </tr>
+        <tr>
+          <td><img src="https://picsum.photos/id/347/100/80" alt="Butter Chicken"></td>
+          <td>Butter Chicken</td>
+          <td>Rich tomato gravy with tender chicken pieces and butter.</td>
+          <td>₹280</td>
+        </tr>
+        <tr>
+          <td><img src="https://picsum.photos/id/1080/100/80" alt="Spring Rolls"></td>
+          <td>Spring Rolls</td>
+          <td>Golden-fried rolls stuffed with mixed veggies.</td>
+          <td>₹180</td>
+        </tr>
+        <tr>
+          <td><img src="https://picsum.photos/id/1059/100/80" alt="Margherita Pizza"></td>
+          <td>Margherita Pizza</td>
+          <td>Classic pizza topped with cheese, basil, and tomato sauce.</td>
+          <td>₹350</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 ABC Delights | All Rights Reserved</p>
+  </footer>
+
 </body>
 </html>
