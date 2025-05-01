@@ -1,170 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Catalog</title>
-    <style>
-        /* General body styling */
-        body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f7f7f7;
-            color: #333;
-            text-align: center;
-        }
-
-        /* Header Styling */
-        h1 {
-            font-size: 2.5em;
-            color: #333;
-            margin-top: 30px;
-            font-weight: 600;
-            letter-spacing: 2px;
-        }
-
-        /* Container for products */
-        .container {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr); /* 3 items per row */
-            gap: 20px;
-            padding: 20px;
-            justify-items: center;
-            max-width: 1200px; /* Limit max width */
-            margin: 0 auto; /* Center container */
-        }
-
-        /* Product card styling */
-        .product {
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            width: 100%;
-            max-width: 280px;
-        }
-
-        /* Hover effect for product card */
-        .product:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-        }
-
-        /* Product Image */
-        .product img {
-            width: 100%;
-            height: 150px;
-            object-fit: cover;
-            border-radius: 8px;
-            transition: transform 0.3s ease;
-        }
-
-        /* Hover effect for product image */
-        .product img:hover {
-            transform: scale(1.05);
-        }
-
-        /* Product Title */
-        .product h2 {
-            font-size: 1.6em;
-            color: #444;
-            margin: 15px 0;
-            font-weight: 600;
-        }
-
-        /* Product Price */
-        .product p {
-            font-size: 1.1em;
-            color: #555;
-            margin-bottom: 15px;
-        }
-
-        /* Button Styling */
-        .product button {
-            background-color: #ff6b81;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 1em;
-            transition: background-color 0.3s ease;
-        }
-
-        /* Hover effect for button */
-        .product button:hover {
-            background-color: #e55b74;
-        }
-
-        /* Pagination Styling */
-        #pagination {
-            margin: 20px 0;
-            display: flex;
-            justify-content: center;
-            gap: 10px;
-        }
-
-        #pagination button {
-            padding: 8px 16px;
-            border-radius: 5px;
-            border: 1px solid #ddd;
-            background-color: #f1f1f1;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        #pagination button:hover {
-            background-color: #ddd;
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            /* Adjust grid for smaller screens */
-            .container {
-                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); /* Flexible grid for mobile */
-            }
-
-            h1 {
-                font-size: 2.2em;
-            }
-        }
-
-        @media (max-width: 480px) {
-            /* One product per row on very small screens */
-            .container {
-                grid-template-columns: 1fr;
-                padding: 10px;
-            }
-
-            .product {
-                padding: 15px;
-                max-width: 100%;
-            }
-
-            h1 {
-                font-size: 1.8em;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Catalog</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
-    <h1>Product Catalog</h1>
-    <div class="container" id="product-list">
-        <!-- Product items will be dynamically inserted here -->
-    </div>
+  <h2>Responsive Product Catalog</h2>
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Product Image</th>
+          <th>Product Name</th>
+          <th>Price (INR ₹)</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody id="product-table-body"></tbody>
+    </table>
+  </div>
 
-    <!-- Pagination controls -->
-    <div id="pagination">
-        <!-- Pagination buttons will be dynamically inserted here -->
-    </div>
+  <div class="pagination">
+    <button id="prev">⬅️ Previous</button>
+    <span id="page-info">Page 1</span>
+    <button id="next">Next ➡️</button>
+  </div>
 
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
-
 </html>

@@ -1,77 +1,68 @@
-document.addEventListener("DOMContentLoaded", () => {
-    let currentPage = 1;
-    const limit = 10;  // Items per page
-
-    // Function to fetch products for a given page
-    function fetchProducts(page) {
-        fetch(`http://localhost:5000/api/products?page=${page}&limit=${limit}`)
-            .then(response => response.json())
-            .then(data => {
-                const productList = document.getElementById("product-list");
-                productList.innerHTML = ""; // Clear current products
-
-                data.products.forEach(product => {
-                    const productDiv = document.createElement("div");
-                    productDiv.classList.add("product");
-
-                    productDiv.innerHTML = `
-                        <img src="${product.image}" alt="${product.name}">
-                        <h2>${product.name}</h2>
-                        <p>$${product.price.toFixed(2)}</p>
-                        <button>${product.description}</button>
-                    `;
-
-                    productList.appendChild(productDiv);
-                });
-
-                // Update pagination controls
-                updatePagination(data.currentPage, data.totalPages);
-            })
-            .catch(error => console.error("Error fetching products:", error));
+const products = [
+    {
+      name: "Wireless Headphones",
+      price: "₹7,999",
+      desc: "Noise-cancelling over-ear headphones.",
+      image: "images/headphones.jpg",
+    },
+    {
+      name: "Smartwatch",
+      price: "₹12,999",
+      desc: "Fitness tracking smartwatch.",
+      image: "images/smartwatch.jpg",
+    },
+    {
+      name: "Gaming Mouse",
+      price: "₹2,499",
+      desc: "Ergonomic gaming mouse.",
+      image: "images/mouse.jpg",
+    },
+    {
+      name: "Laptop Stand",
+      price: "₹1,999",
+      desc: "Adjustable aluminium stand.",
+      image: "images/laptop-stand.jpg",
+    },
+    // Add more objects for testing pagination
+  ];
+  
+  const rowsPerPage = 2;
+  let currentPage = 1;
+  
+  function displayProducts() {
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+    const paginatedItems = products.slice(start, end);
+  
+    const tbody = document.getElementById("product-table-body");
+    tbody.innerHTML = "";
+  
+    paginatedItems.forEach(p => {
+      const row = `<tr>
+        <td><img src="${p.image}" alt="${p.name}"></td>
+        <td>${p.name}</td>
+        <td>${p.price}</td>
+        <td>${p.desc}</td>
+      </tr>`;
+      tbody.innerHTML += row;
+    });
+  
+    document.getElementById("page-info").textContent = `Page ${currentPage} of ${Math.ceil(products.length / rowsPerPage)}`;
+  }
+  
+  document.getElementById("prev").addEventListener("click", () => {
+    if (currentPage > 1) {
+      currentPage--;
+      displayProducts();
     }
-
-    // Function to update pagination controls
-    function updatePagination(currentPage, totalPages) {
-        const pagination = document.getElementById("pagination");
-        pagination.innerHTML = "";  // Clear existing pagination controls
-
-        // Add "Previous" button
-        if (currentPage > 1) {
-            const prevBtn = document.createElement("button");
-            prevBtn.textContent = "Previous";
-            prevBtn.onclick = () => {
-                currentPage--;
-                fetchProducts(currentPage);
-            };
-            pagination.appendChild(prevBtn);
-        }
-
-        // Add page numbers
-        for (let i = 1; i <= totalPages; i++) {
-            const pageBtn = document.createElement("button");
-            pageBtn.textContent = i;
-            pageBtn.onclick = () => {
-                currentPage = i;
-                fetchProducts(currentPage);
-            };
-            if (i === currentPage) {
-                pageBtn.style.fontWeight = "bold"; // Highlight current page
-            }
-            pagination.appendChild(pageBtn);
-        }
-
-        // Add "Next" button
-        if (currentPage < totalPages) {
-            const nextBtn = document.createElement("button");
-            nextBtn.textContent = "Next";
-            nextBtn.onclick = () => {
-                currentPage++;
-                fetchProducts(currentPage);
-            };
-            pagination.appendChild(nextBtn);
-        }
+  });
+  
+  document.getElementById("next").addEventListener("click", () => {
+    if (currentPage < Math.ceil(products.length / rowsPerPage)) {
+      currentPage++;
+      displayProducts();
     }
-
-    // Fetch the first page of products on load
-    fetchProducts(currentPage);
-});
+  });
+  
+  displayProducts();
+  

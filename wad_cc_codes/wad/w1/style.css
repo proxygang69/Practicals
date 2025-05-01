@@ -1,0 +1,41 @@
+body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f4f4f4;
+  }
+  
+  img {
+    width: 60px;
+    height: auto;
+    border-radius: 4px;
+  }
+  
+  .pagination {
+    text-align: center;
+    margin-top: 10px;
+  }
+  
+  button {
+    padding: 6px 12px;
+    margin: 0 5px;
+  }
+  
