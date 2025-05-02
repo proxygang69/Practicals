@@ -1,0 +1,21 @@
+[
+    {
+      "id": 1,
+      "name": "Wireless Headphones",
+      "price": 59.99,
+      "image": "http://localhost:3000/images/headphones.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Bluetooth Speaker",
+      "price": 29.99,
+      "image": "http://localhost:3000/images/speaker.webp"
+    },
+    {
+      "id": 3,
+      "name": "Smart Watch",
+      "price": 99.99,
+      "image": "http://localhost:3000/images/watch.png"
+    }
+  ]
+  
