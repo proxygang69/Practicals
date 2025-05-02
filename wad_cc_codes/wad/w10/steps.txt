@@ -1,0 +1,4 @@
+TO RUN
+1. Be in the W10 directory
+2. In terminal run the command "node backend/server.js"
+3. Run index.html from the Frontend folder on live server 
