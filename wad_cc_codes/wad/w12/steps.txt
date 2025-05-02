@@ -2,3 +2,8 @@ npm install -g @angular/cli
 ng version
 ng new todo-app --standalone
 cd todo-app
+
+
+To Run
+npm i
+ng serve

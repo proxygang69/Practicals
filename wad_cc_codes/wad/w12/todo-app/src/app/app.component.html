@@ -1,7 +1,7 @@
 <div class="container">
   <h1>📝 To-Do List</h1>
 
-  <div class="form-group">
+  <div class="form-group d-flex">
     <input 
       [(ngModel)]="newTask" 
       type="text" 
@@ -9,10 +9,10 @@
       placeholder="Enter your task"
     />
     <button 
-      class="btn btn-primary mt-2" 
+      class="btn btn-primary ms-2" 
       (click)="editIndex === null ? addTask() : updateTask()"
     >
-      {{ editIndex === null ? 'Add Task' : 'Update Task' }}
+      {{ editIndex === null ? 'Add' : 'Update' }}
     </button>
   </div>
 
@@ -25,7 +25,7 @@
 
       <div>
         <button class="btn btn-sm btn-warning me-2" (click)="editTask(i)">Edit</button>
-        <button class="btn btn-sm btn-danger" (click)="deleteTask(i)">Delete</button>
+        <button class="btn btn-sm btn-danger ms-2" (click)="deleteTask(i)">Delete</button>
       </div>
     </li>
   </ul>

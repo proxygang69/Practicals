@@ -1,15 +1,42 @@
 .container {
-    max-width: 600px;
-    margin: 50px auto;
-    padding: 20px;
-  }
-  
-  .form-control {
-    width: 100%;
-    padding: 10px;
-  }
-  
-  button {
-    width: 100%;
-  }
-  
+  max-width: 600px;
+  margin: 50px auto;
+  padding: 20px;
+}
+
+.form-group {
+  display: flex;
+  align-items: center;
+}
+
+.form-control {
+  width: 85%;
+  padding: 10px;
+}
+
+button {
+  width: auto;
+  padding: 8px 15px; /* Smaller height for button */
+  font-size: 14px;
+  min-width: 100px;
+}
+
+button.ms-2 {
+  margin-left: 10px;
+}
+
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px; /* Add vertical space between tasks */
+}
+
+.btn-sm {
+  font-size: 12px;
+  padding: 5px 10px;
+}
+
+.btn-sm.ms-2 {
+  margin-left: 10px; /* Add gap between Edit and Delete buttons */
+}
