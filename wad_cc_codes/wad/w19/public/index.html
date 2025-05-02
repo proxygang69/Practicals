@@ -9,7 +9,36 @@
 <body>
   <div class="container">
     <h1>Student Marks Dashboard</h1>
-    <p>Use routes like <code>/dsbda-more-20</code> or <code>/all-subjects-25</code> in browser or use tools like Postman.</p>
+
+    <!-- Add Student Form -->
+    <form id="add-student-form">
+      <h2>Add Student</h2>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required/>
+
+      <label for="roll_no">Roll No:</label>
+      <input type="number" id="roll_no" name="roll_no" required/>
+
+      <label for="wad_marks">WAD Marks:</label>
+      <input type="number" id="wad_marks" name="wad_marks" required/>
+
+      <label for="cc_marks">CC Marks:</label>
+      <input type="number" id="cc_marks" name="cc_marks" required/>
+
+      <label for="dsbda_marks">DSBDA Marks:</label>
+      <input type="number" id="dsbda_marks" name="dsbda_marks" required/>
+
+      <label for="cns_marks">CNS Marks:</label>
+      <input type="number" id="cns_marks" name="cns_marks" required/>
+
+      <label for="ai_marks">AI Marks:</label>
+      <input type="number" id="ai_marks" name="ai_marks" required/>
+
+      <button type="submit">Add Student</button>
+    </form>
+
+    <!-- Students Table -->
+    <h2>Student List</h2>
     <table>
       <thead>
         <tr>
@@ -23,12 +52,163 @@
         </tr>
       </thead>
       <tbody id="student-body">
-        <!-- Filled dynamically or shown as placeholder -->
+        <!-- Data will be injected here by JavaScript -->
         <tr>
-          <td colspan="7" style="text-align: center;">Visit API endpoints to load student data</td>
+          <td colspan="7" style="text-align: center;">Use the form to add and search for student data</td>
         </tr>
       </tbody>
     </table>
+
+    <!-- Query Form -->
+    <h2>Search Students</h2>
+    <form id="query-form">
+      <label for="subject">Subject:</label>
+      <select id="subject" name="subject" required>
+        <option value="WAD_Marks">WAD</option>
+        <option value="CC_Marks">CC</option>
+        <option value="DSBDA_Marks">DSBDA</option>
+        <option value="CNS_Marks">CNS</option>
+        <option value="AI_marks">AI</option>
+      </select>
+
+      <label for="condition">Condition:</label>
+      <select id="condition" name="condition" required>
+        <option value="gt">Greater than</option>
+        <option value="lt">Less than</option>
+        <option value="eq">Equal to</option>
+      </select>
+
+      <label for="marks">Marks:</label>
+      <input type="number" id="marks" name="marks" required />
+
+      <button type="submit">Search</button>
+      <button type="button" id="reset-button">Reset</button>
+    </form>
+
+    <!-- Query Result Table -->
+    <h2>Query Results</h2>
+    <table id="query-results-table" style="display: none;">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Roll No</th>
+          <th>WAD</th>
+          <th>CC</th>
+          <th>DSBDA</th>
+          <th>CNS</th>
+          <th>AI</th>
+        </tr>
+      </thead>
+      <tbody id="query-results-body">
+        <!-- Query results will be injected here by JavaScript -->
+      </tbody>
+    </table>
   </div>
+
+  <script>
+    // Handle Add Student Form Submission
+    document.getElementById('add-student-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const studentData = {
+        Name: document.getElementById('name').value,
+        Roll_No: document.getElementById('roll_no').value,
+        WAD_Marks: document.getElementById('wad_marks').value,
+        CC_Marks: document.getElementById('cc_marks').value,
+        DSBDA_Marks: document.getElementById('dsbda_marks').value,
+        CNS_Marks: document.getElementById('cns_marks').value,
+        AI_marks: document.getElementById('ai_marks').value
+      };
+
+      fetch('/add-student', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(studentData)
+      })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Student added:', data);
+        alert('Student added successfully!');
+        loadStudents(); // Reload the student list
+      })
+      .catch(error => console.error('Error adding student:', error));
+    });
+
+    // Handle Query Form Submission
+    document.getElementById('query-form').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const subject = document.getElementById('subject').value;
+      const condition = document.getElementById('condition').value;
+      const marks = document.getElementById('marks').value;
+
+      let url = `/students-query?subject=${subject}&condition=${condition}&marks=${marks}`;
+
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          const queryResultsTable = document.getElementById('query-results-table');
+          const queryResultsBody = document.getElementById('query-results-body');
+
+          // Show the query result table
+          queryResultsTable.style.display = 'table';
+          queryResultsBody.innerHTML = ''; // Clear previous results
+
+          // Populate the query result table with new data
+          data.forEach(student => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${student.Name}</td>
+              <td>${student.Roll_No}</td>
+              <td>${student.WAD_Marks}</td>
+              <td>${student.CC_Marks}</td>
+              <td>${student.DSBDA_Marks}</td>
+              <td>${student.CNS_Marks}</td>
+              <td>${student.AI_marks}</td>
+            `;
+            queryResultsBody.appendChild(row);
+          });
+        })
+        .catch(error => console.error('Error fetching students:', error));
+    });
+
+    // Reset Button to clear query results and inputs
+    document.getElementById('reset-button').addEventListener('click', function () {
+      // Clear the query form inputs
+      document.getElementById('query-form').reset();
+
+      // Hide the query result table and clear the data
+      document.getElementById('query-results-table').style.display = 'none';
+      document.getElementById('query-results-body').innerHTML = '';
+    });
+
+    // Function to load all students (initial page load or after adding a student)
+    function loadStudents() {
+      fetch('/students')
+        .then(response => response.json())
+        .then(data => {
+          const tbody = document.getElementById('student-body');
+          tbody.innerHTML = '';
+
+          data.forEach(student => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+              <td>${student.Name}</td>
+              <td>${student.Roll_No}</td>
+              <td>${student.WAD_Marks}</td>
+              <td>${student.CC_Marks}</td>
+              <td>${student.DSBDA_Marks}</td>
+              <td>${student.CNS_Marks}</td>
+              <td>${student.AI_marks}</td>
+            `;
+            tbody.appendChild(row);
+          });
+        })
+        .catch(error => console.error('Error loading students:', error));
+    }
+
+    // Load students when the page loads
+    loadStudents();
+  </script>
 </body>
 </html>
