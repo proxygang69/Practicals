@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
@@ -5,7 +6,7 @@ const app = express();
 const port = 3000;
 
 // MongoDB Connection
-mongoose.connect('CONNECTION_STRING', {
+mongoose.connect('mongodb://localhost:27017/SongDB', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -16,108 +17,92 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Schema
 const songSchema = new mongoose.Schema({
-  Song_Name: String,
+  Song_Name: { type: String, unique: true },
   Film_Name: String,
   Music_Director: String,
   Singer: String,
   Actor: String,
-  Actress: String
+  Actress: String,
+  Favorite: { type: Boolean, default: false }
 });
 
 const Song = mongoose.model('songdetails', songSchema);
 
-// a + b + c: Insert array of 5 songs
-app.get('/insert', async (req, res) => {
-  await Song.insertMany([
-    { Song_Name: 'Kal Ho Na Ho', Film_Name: 'Kal Ho Na Ho', Music_Director: 'Shankar-Ehsaan-Loy', Singer: 'Sonu Nigam', Actor: '', Actress: '' },
-    { Song_Name: 'Tum Hi Ho', Film_Name: 'Aashiqui 2', Music_Director: 'Mithoon', Singer: 'Arijit Singh', Actor: '', Actress: '' },
-    { Song_Name: 'Zinda', Film_Name: 'Bhaag Milkha Bhaag', Music_Director: 'Shankar-Ehsaan-Loy', Singer: 'Siddharth Mahadevan', Actor: '', Actress: '' },
-    { Song_Name: 'Kun Faya Kun', Film_Name: 'Rockstar', Music_Director: 'A. R. Rahman', Singer: 'Mohit Chauhan', Actor: '', Actress: '' },
-    { Song_Name: 'Tera Ban Jaunga', Film_Name: 'Kabir Singh', Music_Director: 'Akhil Sachdeva', Singer: 'Akhil Sachdeva', Actor: '', Actress: '' }
-  ]);
-  res.send("Songs inserted.");
+// Automatically insert predefined songs if they don't exist
+app.get('/init', async (req, res) => {
+  const defaultSongs = [
+    { Song_Name: 'Kal Ho Na Ho', Film_Name: 'Kal Ho Na Ho', Music_Director: 'Shankar-Ehsaan-Loy', Singer: 'Sonu Nigam' },
+    { Song_Name: 'Tum Hi Ho', Film_Name: 'Aashiqui 2', Music_Director: 'Mithoon', Singer: 'Arijit Singh' },
+    { Song_Name: 'Zinda', Film_Name: 'Bhaag Milkha Bhaag', Music_Director: 'Shankar-Ehsaan-Loy', Singer: 'Siddharth Mahadevan' },
+    { Song_Name: 'Kun Faya Kun', Film_Name: 'Rockstar', Music_Director: 'A. R. Rahman', Singer: 'Mohit Chauhan' },
+    { Song_Name: 'Tera Ban Jaunga', Film_Name: 'Kabir Singh', Music_Director: 'Akhil Sachdeva', Singer: 'Akhil Sachdeva' }
+  ];
+
+  let inserted = 0;
+  for (const song of defaultSongs) {
+    const exists = await Song.exists({ Song_Name: song.Song_Name });
+    if (!exists) {
+      await Song.create(song);
+      inserted++;
+    }
+  }
+
+  res.send(inserted ? `Inserted ${inserted} default songs.` : "Default songs already present.");
 });
 
-// d) Display total count and list all songs
+// JSON route to return song list
 app.get('/songs', async (req, res) => {
   const songs = await Song.find();
   const count = await Song.countDocuments();
-  res.send(`
-    <h2>Total Songs: ${count}</h2>
-    <a href="/">← Back</a>
-    <table border="1" cellpadding="10">
-      <tr>
-        <th>Song Name</th>
-        <th>Film Name</th>
-        <th>Music Director</th>
-        <th>Singer</th>
-        <th>Actor</th>
-        <th>Actress</th>
-      </tr>
-      ${songs.map(song => `
-        <tr>
-          <td>${song.Song_Name}</td>
-          <td>${song.Film_Name}</td>
-          <td>${song.Music_Director}</td>
-          <td>${song.Singer}</td>
-          <td>${song.Actor || '-'}</td>
-          <td>${song.Actress || '-'}</td>
-        </tr>
-      `).join('')}
-    </table>
-  `);
+  res.json({ count, songs });
 });
 
-// e) List songs by Music Director
-app.get('/songs/director/:name', async (req, res) => {
-  const songs = await Song.find({ Music_Director: req.params.name });
-  res.json(songs);
-});
-
-// f) List songs by Music Director + Singer
-app.get('/songs/director/:md/singer/:singer', async (req, res) => {
-  const songs = await Song.find({
-    Music_Director: req.params.md,
-    Singer: req.params.singer
-  });
-  res.json(songs);
-});
-
-// g) Delete a song by name
+// Delete a song by name
 app.get('/delete/:song', async (req, res) => {
   await Song.deleteOne({ Song_Name: req.params.song });
   res.send(`Deleted song "${req.params.song}"`);
 });
 
-// h) Add new favorite song
+// Add a song
 app.get('/add', async (req, res) => {
+  const { Song_Name, Film_Name, Music_Director, Singer, Actor = '', Actress = '' } = req.query;
+
+  if (!Song_Name || !Film_Name || !Music_Director || !Singer) {
+    return res.status(400).send("Missing required fields: Song_Name, Film_Name, Music_Director, Singer");
+  }
+
+  const exists = await Song.exists({ Song_Name });
+
+  if (exists) {
+    return res.send(`${Song_Name} already exists in the database.`);
+  }
+
   const newSong = new Song({
-    Song_Name: 'Kesariya',
-    Film_Name: 'Brahmastra',
-    Music_Director: 'Pritam',
-    Singer: 'Arijit Singh',
-    Actor: '',
-    Actress: ''
+    Song_Name,
+    Film_Name,
+    Music_Director,
+    Singer,
+    Actor,
+    Actress
   });
+
   await newSong.save();
-  res.send("Favorite song added.");
+  res.send(`${Song_Name} added successfully.`);
 });
 
-// i) Songs by singer and film
-app.get('/songs/singer/:singer/film/:film', async (req, res) => {
-  const songs = await Song.find({
-    Singer: req.params.singer,
-    Film_Name: req.params.film
-  });
-  res.json(songs);
-});
+// Toggle favorite
+app.put('/favorite/:name', async (req, res) => {
+  try {
+    const song = await Song.findOne({ Song_Name: req.params.name });
+    if (!song) return res.send("Song not found");
 
-// j) Update song with actor and actress
-app.get('/update/:song', async (req, res) => {
-  await Song.updateOne({ Song_Name: req.params.song }, {
-    $set: { Actor: 'Ranbir Kapoor', Actress: 'Alia Bhatt' }
-  });
-  res.send(`Updated "${req.params.song}" with Actor and Actress`);
+    song.Favorite = !song.Favorite;
+    await song.save();
+    res.send(`Marked as ${song.Favorite ? "Favorite ★" : "Not Favorite ☆"}`);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Error updating favorite");
+  }
 });
 
 // Start server

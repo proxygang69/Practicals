@@ -1,14 +1,149 @@
+<!-- public/index.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Song Dashboard</title>
+  <meta charset="UTF-8">
+  <title>Song Directory</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="container">
-    <h1>Music Song Dashboard</h1>
-    <p><a href="/songs">Click here to view all songs</a></p>
-    <p>Use routes like <code>/songs/director/:name</code> or <code>/update/:song</code> directly in the browser.</p>
+  <h1>🎵 Song Directory</h1>
+
+  <div style="margin-bottom: 20px;">
+    <button onclick="addFavorite()">Add Favorite Song (Kesariya)</button>
   </div>
+
+  <h2 id="count">Loading...</h2>
+  <table border="1" cellpadding="10" id="songsTable">
+    <thead>
+      <tr>
+        <th>Song Name</th>
+        <th>Film Name</th>
+        <th>Music Director</th>
+        <th>Singer</th>
+        <th>Actor</th>
+        <th>Actress</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Songs will be inserted here -->
+    </tbody>
+  </table>
+
+  <h3 style="text-align: center;">Add New Song</h3>
+  <div style="max-width: 500px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px;">
+    <form id="addSongForm">
+      <div style="display: flex; margin-bottom: 10px;">
+        <label style="flex: 1; padding-right: 10px;">Song Name:</label>
+        <input type="text" name="Song_Name" required style="flex: 2;">
+      </div>
+      <div style="display: flex; margin-bottom: 10px;">
+        <label style="flex: 1; padding-right: 10px;">Film Name:</label>
+        <input type="text" name="Film_Name" required style="flex: 2;">
+      </div>
+      <div style="display: flex; margin-bottom: 10px;">
+        <label style="flex: 1; padding-right: 10px;">Music Director:</label>
+        <input type="text" name="Music_Director" required style="flex: 2;">
+      </div>
+      <div style="display: flex; margin-bottom: 10px;">
+        <label style="flex: 1; padding-right: 10px;">Singer:</label>
+        <input type="text" name="Singer" required style="flex: 2;">
+      </div>
+      <div style="display: flex; margin-bottom: 10px;">
+        <label style="flex: 1; padding-right: 10px;">Actor:</label>
+        <input type="text" name="Actor" style="flex: 2;">
+      </div>
+      <div style="display: flex; margin-bottom: 10px;">
+        <label style="flex: 1; padding-right: 10px;">Actress:</label>
+        <input type="text" name="Actress" style="flex: 2;">
+      </div>
+      <div style="text-align: center; margin-top: 20px;">
+        <button type="submit" style="padding: 10px 20px; font-weight: bold;">Add Song</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    async function toggleFavorite(songName) {
+      const res = await fetch(`/favorite/${encodeURIComponent(songName)}`, { method: 'PUT' });
+      const text = await res.text();
+      alert(text);
+      fetchSongs();
+    }
+
+    async function fetchSongs() {
+      const res = await fetch('/songs');
+      const { count, songs } = await res.json();
+
+      document.getElementById('count').innerText = `Total Songs: ${count}`;
+      const tbody = document.querySelector('#songsTable tbody');
+      tbody.innerHTML = '';
+
+      songs.forEach(song => {
+        const row = document.createElement('tr');
+
+        row.innerHTML = `
+          <td>${song.Song_Name}</td>
+          <td>${song.Film_Name}</td>
+          <td>${song.Music_Director}</td>
+          <td>${song.Singer}</td>
+          <td>${song.Actor || '-'}</td>
+          <td>${song.Actress || '-'}</td>
+        `;
+
+        const actionCell = document.createElement('td');
+
+        const starBtn = document.createElement('button');
+        starBtn.textContent = song.Favorite ? '★' : '☆';
+        starBtn.style.fontSize = '18px';
+        starBtn.onclick = () => toggleFavorite(song.Song_Name);
+        actionCell.appendChild(starBtn);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.textContent = 'Delete';
+        deleteBtn.style.marginLeft = '10px';
+        deleteBtn.onclick = () => deleteSong(song.Song_Name);
+        actionCell.appendChild(deleteBtn);
+
+        row.appendChild(actionCell);
+        tbody.appendChild(row);
+      });
+    }
+
+    async function addFavorite() {
+      const res = await fetch('/add?Song_Name=Kesariya&Film_Name=Brahmastra&Music_Director=Pritam&Singer=Arijit%20Singh');
+      const text = await res.text();
+      alert(text);
+      fetchSongs();
+    }
+
+    async function deleteSong(songName) {
+      const res = await fetch(`/delete/${encodeURIComponent(songName)}`);
+      const text = await res.text();
+      alert(text);
+      fetchSongs();
+    }
+
+    document.getElementById('addSongForm').addEventListener('submit', async function (e) {
+      e.preventDefault();
+      const formData = new FormData(this);
+      const data = Object.fromEntries(formData.entries());
+      const query = new URLSearchParams(data).toString();
+      const res = await fetch(`/add?${query}`);
+      const text = await res.text();
+      alert(text);
+      this.reset();
+      fetchSongs();
+    });
+
+    // Insert default songs & load songs
+    fetch('/init')
+      .then(res => res.text())
+      .then(console.log)
+      .catch(console.error);
+
+    fetchSongs();
+  </script>
 </body>
 </html>
