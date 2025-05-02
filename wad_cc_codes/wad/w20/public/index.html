@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Employee Directory</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+      background-color: #f5f6fa;
+      color: #2f3640;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #273c75;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 0 auto 2rem auto;
+      padding: 1.5rem;
+      background-color: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    form input, form button {
+      display: block;
+      width: 90%;
+      margin: 0.5rem 0;
+      padding: 0.8rem;
+      border: 1px solid #dcdde1;
+      border-radius: 4px;
+      font-size: 1rem;
+    }
+
+    form button {
+      margin: auto;  
+      width: 50%;
+      background-color: #44bd32;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    form button:hover {
+      background-color: #4cd137;
+    }
+
+    #employeeList {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0;
+      list-style: none;
+    }
+
+    .employee-card {
+      background-color: #ffffff;
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .employee-details {
+      flex: 1;
+    }
+
+    .employee-details strong {
+      display: block;
+      font-size: 1.1rem;
+      color: #192a56;
+    }
+
+    .employee-meta {
+      color: #718093;
+    }
+  </style>
+</head>
+<body>
+  <h1>Employee Directory</h1>
+
+  <!-- Add Employee Form -->
+  <h2>Add Employee</h2>
+  <form id="employeeForm">
+    <input type="text" id="name" placeholder="Name" required />
+    <input type="text" id="department" placeholder="Department" required />
+    <input type="text" id="designation" placeholder="Designation" required />
+    <input type="number" id="salary" placeholder="Salary" required />
+    <input type="date" id="joiningDate" required />
+    <button type="submit">Add Employee</button>
+  </form>
+
+  <!-- Display Employees -->
+  <h2>All Employees</h2>
+  <ul id="employeeList"></ul>
+
+  <script>
+    let editingEmployeeId = null;
+  
+    const loadEmployees = async () => {
+      const res = await fetch('/api/employees');
+      const employees = await res.json();
+      const list = document.getElementById('employeeList');
+      list.innerHTML = '';
+  
+      employees.forEach(emp => {
+        const li = document.createElement('li');
+        li.className = 'employee-card';
+        li.innerHTML = `
+          <div class="employee-details">
+            <strong>${emp.name}</strong>
+            <div class="employee-meta">${emp.designation} - ${emp.department}</div>
+            <div class="employee-meta">Salary: ₹${emp.salary}</div>
+            <div class="employee-meta">Joined: ${new Date(emp.joiningDate).toLocaleDateString()}</div>
+          </div>
+          <div>
+            <button onclick="editEmployee('${emp._id}', '${emp.name}', '${emp.department}', '${emp.designation}', '${emp.salary}', '${emp.joiningDate}')"
+              style="margin-right: 0.5rem; background: #00a8ff; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+              Edit
+            </button>
+            <button onclick="deleteEmployee('${emp._id}')"
+              style="background: #e84118; color: white; border: none; padding: 0.5rem 1rem; border-radius: 5px; cursor: pointer;">
+              Delete
+            </button>
+          </div>
+        `;
+        list.appendChild(li);
+      });
+    };
+  
+    const deleteEmployee = async (id) => {
+      if (!confirm("Are you sure you want to delete this employee?")) return;
+  
+      const res = await fetch(`/api/employees/${id}`, {
+        method: 'DELETE',
+      });
+  
+      if (res.ok) {
+        alert('Employee deleted!');
+        loadEmployees();
+      } else {
+        alert('Error deleting employee');
+      }
+    };
+  
+    const editEmployee = (id, name, department, designation, salary, joiningDate) => {
+      document.getElementById('name').value = name;
+      document.getElementById('department').value = department;
+      document.getElementById('designation').value = designation;
+      document.getElementById('salary').value = salary;
+      document.getElementById('joiningDate').value = joiningDate.substring(0, 10); // format date
+      editingEmployeeId = id;
+  
+      document.querySelector('form button').textContent = 'Update Employee';
+    };
+  
+    document.getElementById('employeeForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+  
+      const newEmployee = {
+        name: document.getElementById('name').value,
+        department: document.getElementById('department').value,
+        designation: document.getElementById('designation').value,
+        salary: document.getElementById('salary').value,
+        joiningDate: document.getElementById('joiningDate').value,
+      };
+  
+      if (editingEmployeeId) {
+        // Update existing employee
+        const res = await fetch(`/api/employees/${editingEmployeeId}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newEmployee),
+        });
+  
+        if (res.ok) {
+          alert('Employee updated!');
+          editingEmployeeId = null;
+          document.querySelector('form button').textContent = 'Add Employee';
+          document.getElementById('employeeForm').reset();
+          loadEmployees();
+        } else {
+          alert('Error updating employee');
+        }
+      } else {
+        // Add new employee
+        const res = await fetch('/api/employees', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newEmployee),
+        });
+  
+        if (res.ok) {
+          alert('Employee added!');
+          document.getElementById('employeeForm').reset();
+          loadEmployees();
+        } else {
+          alert('Error adding employee');
+        }
+      }
+    });
+  
+    loadEmployees();
+  </script>
+  
+  
+</body>
+</html>

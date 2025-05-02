@@ -1,52 +1,28 @@
 const express = require('express');
-const Employee = require('../models/Employee');
-const router = express.Router();
+const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
+const employeeRoutes = require('./routes/employeeRoutes');
+const path = require('path');
 
-// Add a new employee
-router.post('/employees', async (req, res) => {
-  try {
-    const { name, department, designation, salary, joiningDate } = req.body;
-    const newEmployee = new Employee({ name, department, designation, salary, joiningDate });
-    await newEmployee.save();
-    res.status(201).json(newEmployee);
-  } catch (err) {
-    res.status(400).json({ error: 'Error adding employee' });
-  }
+const app = express();
+const PORT = 3000;
+
+// Middleware
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true })); // For form submissions
+app.use(express.static(path.join(__dirname, 'public')));
+
+// MongoDB connection
+mongoose.connect('mongodb://127.0.0.1:27017/', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => console.log('MongoDB connected'))
+  .catch(err => console.log('MongoDB connection error:', err));
+
+// Routes
+app.use('/api', employeeRoutes); // Base route
+
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server running at http://localhost:${PORT}`);
 });
-
-// Get all employee records
-router.get('/employees', async (req, res) => {
-  try {
-    const employees = await Employee.find();
-    res.status(200).json(employees);
-  } catch (err) {
-    res.status(400).json({ error: 'Error fetching employees' });
-  }
-});
-
-// Update an existing employee's details
-router.put('/employees/:id', async (req, res) => {
-  try {
-    const { name, department, designation, salary, joiningDate } = req.body;
-    const updatedEmployee = await Employee.findByIdAndUpdate(
-      req.params.id,
-      { name, department, designation, salary, joiningDate },
-      { new: true }
-    );
-    res.status(200).json(updatedEmployee);
-  } catch (err) {
-    res.status(400).json({ error: 'Error updating employee' });
-  }
-});
-
-// Delete an employee record
-router.delete('/employees/:id', async (req, res) => {
-  try {
-    await Employee.findByIdAndDelete(req.params.id);
-    res.status(200).json({ message: 'Employee deleted successfully' });
-  } catch (err) {
-    res.status(400).json({ error: 'Error deleting employee' });
-  }
-});
-
-module.exports = router;
