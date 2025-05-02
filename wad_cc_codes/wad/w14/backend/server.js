@@ -6,25 +6,17 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
-// Enable CORS
 app.use(cors());
 
-// Serve static files from 'public' folder
-app.use(express.static('public'));
-
-// API route to get users
+// Route to serve user data
 app.get('/api/users', (req, res) => {
   const filePath = path.join(__dirname, 'users.json');
   fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      return res.status(500).json({ message: 'Error reading user data' });
-    }
-    const users = JSON.parse(data);
-    res.json(users);
+    if (err) return res.status(500).json({ error: 'Unable to read data' });
+    res.json(JSON.parse(data));
   });
 });
 
-// Start server
 app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`);
 });
