@@ -1,8 +1,15 @@
-<h2>Login</h2>
-<form (ngSubmit)="login()">
-  <input [(ngModel)]="email" name="email" placeholder="Email" required />
-  <input [(ngModel)]="password" name="password" placeholder="Password" type="password" required />
-  <button type="submit">Login</button>
-  <button type="button" (click)="reset()">Reset</button>
-</form>
-<p>Don't have an account? <a routerLink="/register">Register here</a></p>
+<div class="login-container">
+  <h2>Login</h2>
+
+  <form (ngSubmit)="login()">
+    <input [(ngModel)]="email" name="email" placeholder="Email" required />
+    <input [(ngModel)]="password" name="password" placeholder="Password" type="password" required />
+
+    <div class="button-group">
+      <button type="submit">Login</button>
+      <button type="button" (click)="reset()">Reset</button>
+    </div>
+  </form>
+
+  <p>Don't have an account? <a routerLink="/register">Register here</a></p>
+</div>
