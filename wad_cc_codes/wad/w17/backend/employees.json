@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Alice Johnson",
+    "designation": "Software Engineer",
+    "department": "Development",
+    "salary": 85000,
+    "image": "https://i.pravatar.cc/150?img=1"
+  },
+  {
+    "id": 2,
+    "name": "Bob Smith",
+    "designation": "Product Manager",
+    "department": "Product",
+    "salary": 95000,
+    "image": "https://i.pravatar.cc/150?img=2"
+  }
+]

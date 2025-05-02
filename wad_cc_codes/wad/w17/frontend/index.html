@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Directory</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      color: #2c3e50;
+    }
+
+    #employee-list {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .employee-card {
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 15px 20px;
+      width: 90%;
+      max-width: 400px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease;
+    }
+
+    .employee-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .employee-card img {
+      border-radius: 50%;
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+    }
+
+    .employee-info {
+      text-align: left;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <h1>Employee Directory</h1>
+  <div id="employee-list"></div>
+
+  <script>
+    fetch('http://localhost:3000/api/employees')
+      .then(res => res.json())
+      .then(data => {
+        const list = document.getElementById('employee-list');
+        data.forEach(emp => {
+          list.innerHTML += `
+            <div class="employee-card">
+              <img src="${emp.image}" alt="${emp.name}">
+              <div class="employee-info">
+                <strong>${emp.name}</strong><br>
+                ${emp.designation}, ${emp.department}<br>
+                💰 $${emp.salary}
+              </div>
+            </div>
+          `;
+        });
+      })
+      .catch(err => console.error('Error:', err));
+  </script>
+</body>
+</html>
