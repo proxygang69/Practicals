@@ -1,0 +1,119 @@
+<!-- public/index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Online Bookstore</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
+    }
+    form, .book {
+      background: white;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+    input, button {
+      padding: 8px;
+      margin: 5px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button.delete {
+      background-color: #dc3545;
+    }
+    button.edit {
+      background-color: #ffc107;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Bookstore Management</h1>
+
+  <form id="bookForm">
+    <input type="text" id="title" placeholder="Title" required>
+    <input type="text" id="author" placeholder="Author" required>
+    <input type="number" id="price" placeholder="Price" required>
+    <input type="text" id="genre" placeholder="Genre" required>
+    <button type="submit">Add Book</button>
+  </form>
+
+  <div id="bookList"></div>
+
+  <script>
+    const bookForm = document.getElementById('bookForm');
+    const bookList = document.getElementById('bookList');
+    let editMode = false, editId = null;
+
+    async function fetchBooks() {
+      const res = await fetch('/api/books');
+      const books = await res.json();
+      bookList.innerHTML = '';
+      books.forEach(book => {
+        const div = document.createElement('div');
+        div.className = 'book';
+        div.innerHTML = `
+          <strong>${book.title}</strong> by ${book.author}<br>
+          Genre: ${book.genre}, Price: ₹${book.price} <br>
+          <button class="edit" onclick="editBook('${book._id}', '${book.title}', '${book.author}', ${book.price}, '${book.genre}')">Edit</button>
+          <button class="delete" onclick="deleteBook('${book._id}')">Delete</button>
+        `;
+        bookList.appendChild(div);
+      });
+    }
+
+    bookForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const book = {
+        title: document.getElementById('title').value,
+        author: document.getElementById('author').value,
+        price: document.getElementById('price').value,
+        genre: document.getElementById('genre').value,
+      };
+
+      const url = editMode ? `/api/books/${editId}` : '/api/books';
+      const method = editMode ? 'PUT' : 'POST';
+
+      await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(book)
+      });
+
+      editMode = false;
+      editId = null;
+      bookForm.reset();
+      fetchBooks();
+    });
+
+    async function deleteBook(id) {
+      await fetch(`/api/books/${id}`, { method: 'DELETE' });
+      fetchBooks();
+    }
+
+    function editBook(id, title, author, price, genre) {
+      editMode = true;
+      editId = id;
+      document.getElementById('title').value = title;
+      document.getElementById('author').value = author;
+      document.getElementById('price').value = price;
+      document.getElementById('genre').value = genre;
+    }
+
+    fetchBooks();
+  </script>
+</body>
+</html>
