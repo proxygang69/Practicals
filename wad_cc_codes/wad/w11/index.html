@@ -17,7 +17,7 @@
   <div class="text-center mb-4">
     <button id="registerBtn" class="btn btn-outline-primary mx-1" onclick="showSection('registerSection')">Register</button>
     <button id="loginBtn" class="btn btn-outline-success mx-1" onclick="showSection('loginSection')">Login</button>
-    <button id="logoutBtn" class="btn btn-outline-danger mx-1 hidden" id="logoutBtn" onclick="logout()">Logout</button>
+    <button id="logoutBtn" class="btn btn-outline-danger mx-1 hidden" onclick="logout()">Logout</button>
   </div>
 
   <!-- Register Section -->
@@ -56,64 +56,64 @@
 </div>
 
 <script>
+  // Storage Utilities
   const getUsers = () => JSON.parse(localStorage.getItem("users") || "[]");
   const saveUsers = (users) => localStorage.setItem("users", JSON.stringify(users));
 
   function toggleNavButtons(isLoggedIn) {
-  document.getElementById("registerBtn").classList.toggle("hidden", isLoggedIn);
-  document.getElementById("loginBtn").classList.toggle("hidden", isLoggedIn);
-  document.getElementById("logoutBtn").classList.toggle("hidden", !isLoggedIn);
-}
+    document.getElementById("registerBtn").classList.toggle("hidden", isLoggedIn);
+    document.getElementById("loginBtn").classList.toggle("hidden", isLoggedIn);
+    document.getElementById("logoutBtn").classList.toggle("hidden", !isLoggedIn);
+  }
 
-
-  const showSection = (sectionId) => {
+  function showSection(sectionId) {
     ["registerSection", "loginSection", "userListSection"].forEach(id =>
       document.getElementById(id).classList.add("hidden")
     );
     document.getElementById(sectionId).classList.remove("hidden");
-  };
-
-  function simulateServerPost(url, data) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        let users = getUsers();
-        if (users.some(u => u.username === data.username)) {
-          resolve({ success: false, message: "⚠️ Username already exists." });
-        } else {
-          users.push(data);
-          saveUsers(users);
-          resolve({ success: true });
-        }
-      }, 500); // simulate network delay
-    });
   }
 
-  // Register
+  // Simulate AJAX-style registration
+  function ajaxRegisterUser(user, callback) {
+    setTimeout(() => {
+      const users = getUsers();
+      if (users.some(u => u.username === user.username)) {
+        callback({ success: false, message: "⚠️ Username already exists." });
+      } else {
+        users.push(user);
+        saveUsers(users);
+        callback({ success: true });
+      }
+    }, 500);
+  }
+
+  // Simulate AJAX-style login
+  function ajaxLoginUser(username, password, callback) {
+    setTimeout(() => {
+      const users = getUsers();
+      const matchedUser = users.find(u => u.username === username && u.password === password);
+      if (matchedUser) {
+        callback({ success: true, user: matchedUser });
+      } else {
+        callback({ success: false, message: "❌ Invalid username or password." });
+      }
+    }, 500);
+  }
+
+  // Register Form Handler
   document.getElementById("registerForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
-    // Get input elements
-const nameInput = document.getElementById("name");
-const emailInput = document.getElementById("email");
-const mobileInput = document.getElementById("mobile");
-const dobInput = document.getElementById("dob");
-const cityInput = document.getElementById("city");
-const addressInput = document.getElementById("address");
-const regUsernameInput = document.getElementById("regUsername");
-const regPasswordInput = document.getElementById("regPassword");
-
-
-const user = {
-  name: nameInput.value.trim(),
-  email: emailInput.value.trim(),
-  mobile: mobileInput.value.trim(),
-  dob: dobInput.value,
-  city: cityInput.value.trim(),
-  address: addressInput.value.trim(),
-  username: regUsernameInput.value.trim(),
-  password: regPasswordInput.value.trim(),
-};
-
+    const user = {
+      name: name.value.trim(),
+      email: email.value.trim(),
+      mobile: mobile.value.trim(),
+      dob: dob.value,
+      city: city.value.trim(),
+      address: address.value.trim(),
+      username: regUsername.value.trim(),
+      password: regPassword.value.trim(),
+    };
 
     if (!/^\d{10}$/.test(user.mobile)) {
       regMsg.textContent = "❌ Enter a valid 10-digit mobile number.";
@@ -121,11 +121,11 @@ const user = {
       return;
     }
 
-    simulateServerPost("/register", user).then(response => {
+    ajaxRegisterUser(user, function (response) {
       if (response.success) {
         regMsg.textContent = "✅ Registered successfully!";
         regMsg.className = "text-success mt-2";
-        document.getElementById("registerForm").reset();
+        registerForm.reset();
       } else {
         regMsg.textContent = response.message;
         regMsg.className = "text-warning mt-2";
@@ -133,24 +133,24 @@ const user = {
     });
   });
 
-  // Login
+  // Login Form Handler
   document.getElementById("loginForm").addEventListener("submit", function (e) {
     e.preventDefault();
+
     const username = loginUsername.value.trim();
     const password = loginPassword.value.trim();
-    const users = getUsers();
 
-    const matchedUser = users.find(u => u.username === username && u.password === password);
-
-    if (matchedUser) {
-      sessionStorage.setItem("loggedInUser", JSON.stringify(matchedUser));
-      loginMsg.textContent = "";
-      toggleNavButtons(true);
-      showSection("userListSection");
-      displayUsers();
-    } else {
-      loginMsg.textContent = "❌ Invalid username or password.";
-    }
+    ajaxLoginUser(username, password, function (response) {
+      if (response.success) {
+        sessionStorage.setItem("loggedInUser", JSON.stringify(response.user));
+        loginMsg.textContent = "";
+        toggleNavButtons(true);
+        showSection("userListSection");
+        displayUsers();
+      } else {
+        loginMsg.textContent = response.message;
+      }
+    });
   });
 
   function logout() {
@@ -164,7 +164,7 @@ const user = {
     if (users.length === 0) {
       userTable.innerHTML = "<p>No users found.</p>";
     } else {
-      let rows = users.map(u => `
+      const rows = users.map(u => `
         <tr>
           <td>${u.name}</td>
           <td>${u.email}</td>
@@ -186,19 +186,17 @@ const user = {
     }
   }
 
-  // Initial state
+  // Initial load
   window.onload = () => {
-  const isLoggedIn = !!sessionStorage.getItem("loggedInUser");
-  toggleNavButtons(isLoggedIn);
-
-  if (isLoggedIn) {
-    showSection("userListSection");
-    displayUsers();
-  } else {
-    showSection("registerSection");
-  }
-};
-
+    const isLoggedIn = !!sessionStorage.getItem("loggedInUser");
+    toggleNavButtons(isLoggedIn);
+    if (isLoggedIn) {
+      showSection("userListSection");
+      displayUsers();
+    } else {
+      showSection("registerSection");
+    }
+  };
 </script>
 </body>
 </html>
