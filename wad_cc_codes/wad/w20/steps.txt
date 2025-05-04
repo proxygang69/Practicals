@@ -16,6 +16,9 @@ employee-management/
 npm init -y
 npm install express mongoose body-parser
 
+To Run:
+node server.js
+
 1. URL: http://localhost:5000/api/employees
    Method: POST
    Body:

@@ -1,3 +1,5 @@
+npm init -y
+npm install express
 TO RUN
 1. Be in the W10 directory
 2. In terminal run the command "node backend/server.js"

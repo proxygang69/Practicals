@@ -1,7 +1,8 @@
 npm init -y
 npm install express mongoose
 
-
+To Run:
+node server.js
 
 mongo db connection is Important!!!
 

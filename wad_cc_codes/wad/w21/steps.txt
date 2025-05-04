@@ -8,6 +8,8 @@ bookstore-backend/
 ├── package.json
 
 
+To Run:
+node server.js
 
 Method: POST  
 URL: http://localhost:3000/api/books  
