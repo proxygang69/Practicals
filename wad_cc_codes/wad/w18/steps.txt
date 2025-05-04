@@ -4,7 +4,8 @@ npm install express mongoose
 
 Mongo DB connection string should be replaced with your  connection string
 
-
+To Run:
+node server.js
 
 
 http://localhost:3000/insert — Insert sample songs
