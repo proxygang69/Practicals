@@ -1,60 +1,83 @@
+/* Reset defaults */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
-    margin: 0;
-    padding: 30px;
-  }
-  
-  .container {
-    max-width: 500px;
-    margin: auto;
-    background: white;
-    padding: 20px 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  }
-  
-  h2, h3 {
-    text-align: center;
-    color: #2c3e50;
-  }
-  
-  form input {
-    width: 100%;
-    padding: 10px;
-    margin-top: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .buttons {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  button {
-    padding: 10px 20px;
-    background-color: #3498db;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  button#resetBtn {
-    background-color: #e74c3c;
-  }
-  
-  button:hover {
-    opacity: 0.9;
-  }
-  
-  .user-card {
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 8px;
-    margin-top: 10px;
-    background-color: #f9f9f9;
-  }
-  
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  background-color: #f4f8fb;
+  color: #2c3e50;
+  padding: 20px;
+}
+
+/* Header */
+header {
+  background-color: #3a7ca5;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+/* Section Headings */
+section h2 {
+  color: #2a628f;
+  margin-bottom: 10px;
+}
+
+/* Sections */
+.intro, .popular, .cuisines, .menu {
+  margin-bottom: 30px;
+  background-color: #eaf2f8;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(42, 98, 143, 0.08);
+}
+
+/* Lists */
+ol, ul {
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+th, td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #d0e0ec;
+}
+
+th {
+  background-color: #2a628f;
+  color: white;
+}
+
+img {
+  border-radius: 5px;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  padding: 15px;
+  margin-top: 40px;
+  background-color: #dce9f5;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #476d85;
+}
