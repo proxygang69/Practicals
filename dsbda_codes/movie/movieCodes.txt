@@ -1,0 +1,79 @@
+Movie Driver
+
+package movie;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+public class movieDriver {
+    public static void main(String[] args) throws Exception {
+        Configuration conf = new Configuration();
+        Job job = Job.getInstance(conf, "Movie Rating Average");
+
+        job.setJarByClass(movieDriver.class);
+        job.setMapperClass(movieMapper.class);
+        job.setReducerClass(movieReducer.class);
+
+        job.setOutputKeyClass(IntWritable.class);
+        job.setOutputValueClass(FloatWritable.class);
+
+        FileInputFormat.addInputPath(job, new Path(args[0])); // Input CSV
+        FileOutputFormat.setOutputPath(job, new Path(args[1])); // Output dir
+
+        System.exit(job.waitForCompletion(true) ? 0 : 1);
+    }
+}
+
+
+Movie Mapper
+
+package movie;
+
+import java.io.IOException;
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.mapreduce.Mapper;
+
+public class movieMapper extends Mapper<LongWritable, Text, IntWritable, FloatWritable> {
+    public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
+        if (key.get() == 0 && value.toString().contains("userId")) return; // skip header
+
+        String[] fields = value.toString().split(",");
+        if (fields.length < 3) return;
+        try {
+            int movieId = Integer.parseInt(fields[1].trim());
+            float rating = Float.parseFloat(fields[2].trim());
+
+            context.write(new IntWritable(movieId), new FloatWritable(rating));
+        } catch (NumberFormatException e) {
+            // Ignore malformed lines
+        }
+    }
+}
+
+Movie Reducer
+
+package movie;
+
+import java.io.IOException;
+import org.apache.hadoop.io.*;
+import org.apache.hadoop.mapreduce.Reducer;
+
+public class movieReducer extends Reducer<IntWritable, FloatWritable, IntWritable, FloatWritable> {
+    public void reduce(IntWritable key, Iterable<FloatWritable> values, Context context) throws IOException, InterruptedException {
+        float sum = 0;
+        int count = 0;
+
+        for (FloatWritable val : values) {
+            sum += val.get();
+            count++;
+        }
+
+        if (count > 0) {
+            float avg = sum / count;
+            context.write(key, new FloatWritable(avg));
+        }
+    }
+}

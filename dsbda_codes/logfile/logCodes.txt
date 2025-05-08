@@ -1,0 +1,98 @@
+Log Mapper Code
+
+package logfile;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.LongWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Mapper;
+
+
+public class LogMapper extends Mapper<LongWritable, Text, Text, IntWritable>{
+	public SimpleDateFormat format = new SimpleDateFormat("M/d/yyyy H:mm");
+	
+	@Override
+	public void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException{
+		String[] fields = value.toString().split(",");
+		try{	
+			if(fields.length == 8){
+				String user = fields[1].toString();
+				Date login = format.parse(fields[5]);
+				Date logout = format.parse(fields[7]);
+				
+				long time = (logout.getTime() - login.getTime())/(60*1000);
+				
+				if(time >= 0){				
+					context.write(new Text(user), new IntWritable((int)time));
+				}
+			}
+		} catch (Exception e){
+			// skip row
+		}
+	}
+}
+
+
+Log Reducer Code
+
+package logfile;
+import java.io.IOException;
+
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Reducer;
+
+
+public class LogReducer extends Reducer<Text, IntWritable, Text, IntWritable>{
+	@Override
+	public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException{
+		int totalTime = 0;
+		for(IntWritable value : values){
+			totalTime += value.get();
+		}
+		context.write(key, new IntWritable(totalTime));
+	}
+}
+
+
+Log Time Code
+
+package logfile;
+
+import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Job;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
+
+public class LogTime {
+	public static void main(String[] args) throws Exception{
+		Path input = new Path(args[0]);
+		Path output = new Path(args[1]);
+		
+		Job job = new Job();
+		
+		job.setJarByClass(LogTime.class);
+		job.setJobName("Log Time");
+		
+		FileInputFormat.setInputPaths(job, input);
+		FileOutputFormat.setOutputPath(job, output);
+		
+		job.setMapperClass(LogMapper.class);
+		job.setReducerClass(LogReducer.class);
+		
+		job.setMapOutputKeyClass(Text.class);
+		job.setMapOutputValueClass(IntWritable.class);
+		
+		job.setOutputKeyClass(Text.class);
+		job.setOutputValueClass(IntWritable.class);
+		
+		boolean success = job.waitForCompletion(true);
+		System.exit(success ? 0 : 1);
+	}
+}
